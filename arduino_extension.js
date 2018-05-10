@@ -27,7 +27,8 @@
     ANALOG_MAPPING_QUERY = 0x69,
     ANALOG_MAPPING_RESPONSE = 0x6A,
     CAPABILITY_QUERY = 0x6B,
-    CAPABILITY_RESPONSE = 0x6C;
+    CAPABILITY_RESPONSE = 0x6C,
+    STRING_DATA = 0x71;
 
   var INPUT = 0x00,
     OUTPUT = 0x01,
@@ -293,6 +294,12 @@
     }
     pinMode(pin, INPUT);
     return (digitalInputData[pin >> 3] >> (pin & 0x07)) & 0x01;
+  }
+  
+  function test(s) {
+    var msg = new Uint8Array([
+        START_SYSEX, STRING_DATA, END_SYSEX]);
+    device.send(msg.buffer);  
   }
 
   function analogWrite(pin, val) {
@@ -860,7 +867,9 @@
       ['h', 'когда ан. вход %n %m.ops %n%', 'whenAnalogRead', 1, '>', 50],
       ['r', 'значение ан. входа %n', 'analogRead', 0],
       ['-'],
-      ['r', 'отобразить %n из %n %n в %n %n', 'mapValues', 50, 0, 100, -240, 240]
+      ['r', 'отобразить %n из %n %n в %n %n', 'mapValues', 50, 0, 100, -240, 240],
+      ['-']
+      [' ', 'test %s', 'test', 'tst']
     ],
     el: [
       ['h', 'Όταν η συσκευή είναι συνδεδεμένη', 'whenConnected'],
